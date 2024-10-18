@@ -1,14 +1,17 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../store';
-import { setProducts } from '../store/slices/productSlice';
-import { addToCart } from '../store/slices/cartSlice';
-import { Star } from 'lucide-react';
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState } from '../store'
+import { setProducts } from '../store/slices/productSlice'
+import { addToCart } from '../store/slices/cartSlice'
+import { Star } from 'lucide-react'
+import { Product } from '../types/Products'
 
 const ProductDashboard: React.FC = () => {
-  const dispatch = useDispatch();
-  const products = useSelector((state: RootState) => state.products.products);
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const dispatch = useDispatch()
+  const products = useSelector((state: RootState) => state.products.products)
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  )
 
   useEffect(() => {
     const dummyProducts = [
@@ -52,45 +55,61 @@ const ProductDashboard: React.FC = () => {
         image: 'https://source.unsplash.com/random/300x300?hiking-boots',
         rating: 5,
       },
-    ];
-    dispatch(setProducts(dummyProducts));
-  }, [dispatch]);
+    ]
+    dispatch(setProducts(dummyProducts))
+  }, [dispatch])
 
-  const handleAddToCart = (product: any) => {
+  const handleAddToCart = (product: Product) => {
     if (isAuthenticated) {
-      dispatch(addToCart({ id: product.id, name: product.name, price: product.price, quantity: 1 }));
+      dispatch(
+        addToCart({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          quantity: 1,
+        })
+      )
     } else {
-      alert('Please sign in to add items to your cart');
+      alert('Please sign in to add items to your cart')
     }
-  };
+  }
 
   return (
-    <div className="p-8">
-      <h2 className="text-3xl font-bold mb-8">Essential Items</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {products.map((product) => (
-          <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-            <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
-            <div className="p-4">
-              <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
-              <p className="text-gray-600 mb-2">{product.description}</p>
-              <div className="flex justify-between items-center">
-                <span className="text-2xl font-bold text-purple-600">${product.price.toFixed(2)}</span>
-                <div className="flex items-center">
+    <div className='p-8'>
+      <h2 className='text-3xl font-bold mb-8'>Essential Items</h2>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
+        {products.map(product => (
+          <div
+            key={product.id}
+            className='bg-white rounded-lg shadow-md overflow-hidden'
+          >
+            <img
+              src={product.image}
+              alt={product.name}
+              className='w-full h-48 object-cover'
+            />
+            <div className='p-4'>
+              <h3 className='text-xl font-semibold mb-2'>{product.name}</h3>
+              <p className='text-gray-600 mb-2'>{product.description}</p>
+              <div className='flex justify-between items-center'>
+                <span className='text-2xl font-bold text-purple-600'>
+                  ${product.price.toFixed(2)}
+                </span>
+                <div className='flex items-center'>
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
                       className={`w-5 h-5 ${
                         i < product.rating ? 'text-yellow-400' : 'text-gray-300'
                       }`}
-                      fill="currentColor"
+                      fill='currentColor'
                     />
                   ))}
                 </div>
               </div>
               <button
                 onClick={() => handleAddToCart(product)}
-                className="mt-4 w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition duration-300"
+                className='mt-4 w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition duration-300'
               >
                 Add to Cart
               </button>
@@ -99,7 +118,7 @@ const ProductDashboard: React.FC = () => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProductDashboard;
+export default ProductDashboard
